@@ -60,14 +60,14 @@ function testesGA(i, j, k)
                   mutation = uniform(2 ^ i))
     elseif i == 4
         printstyled("Tam. população: ")
-        printstyled("200\n", color = :cyan)
+        printstyled("500\n", color = :cyan)
         return GA(populationSize = 500, 
                   selection = s,
                   crossover = c, 
                   mutation = uniform(2 ^ i))
     elseif i == 5
         printstyled("Tam. população: ")
-        printstyled("500\n", color = :cyan)
+        printstyled("1000\n", color = :cyan)
         return GA(populationSize = 1000, 
                   selection = s,
                   crossover = c, 
@@ -75,18 +75,31 @@ function testesGA(i, j, k)
     end
 end
 
-for i = 1:5
-    for j = 1:3
-        for k = 1:2
-            dimensao = 2^i
-            printstyled(">Teste $i\n", color = :light_blue, blink = true)
-            result = Evolutionary.optimize(f, zeros(dimensao), testesGA(i, j, k))
-            println("Dimensão: ", 2^i)
-            println("Resultado ótimo: 0, ", [1/x for x = 1:dimensao])
-            println("Iterações executadas: ", Evolutionary.iterations(result))
-            println("Resultado obtido: ", minimum(result), ", ", Evolutionary.minimizer(result))
-            println()
-        end
-    end
-    x = readline()
-end
+# for i = 1:5
+#     for j = 1:3
+#         for k = 1:2
+#             dimensao = 2^i
+#             printstyled(">Teste $i\n", color = :light_blue, blink = true)
+#             result = Evolutionary.optimize(f, zeros(dimensao), testesGA(i, j, k))
+#             println("Dimensão: ", 2^i)
+#             println("Resultado ótimo: 0, ", [1/x for x = 1:dimensao])
+#             println("Iterações executadas: ", Evolutionary.iterations(result))
+#             println("Resultado obtido: ", minimum(result), ", ", Evolutionary.minimizer(result))
+#             println()
+#         end
+#     end
+#     x = readline()
+# end
+
+dimensao = 8
+result = Evolutionary.optimize(f, zeros(dimensao), GA(
+    populationSize = 5000,
+    crossoverRate = 0.8,
+    mutationRate = 0.2,
+    epsilon = 100,
+    selection = tournament(10),
+    crossover = Evolutionary.IC(1),
+    mutation = Evolutionary.gaussian(0.5)
+))
+
+println(result)

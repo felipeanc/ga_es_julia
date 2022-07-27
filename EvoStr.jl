@@ -33,28 +33,45 @@ function testesEE(i, j, k)
       printstyled("Casamento\n", color = :cyan)
   end
 
-  return ES(initStrategy = IsotropicStrategy(4^i),
+  return ES(initStrategy = IsotropicStrategy(i),
       recombination = Evolutionary.average,
       srecombination = c,
       mutation = Evolutionary.gaussian,
       smutation = Evolutionary.gaussian,
       selection = s)
-
-  
 end
 
-for i = 1:5
-  for j = 1:3
-      for k = 1:2
-          dimensao = 2^i
-          printstyled(">Teste $i\n", color = :light_blue, blink = true)
-          result = Evolutionary.optimize(f, zeros(dimensao), testesEE(i, j, k))
-          println("Dimensão: ", 2^i)
-          println("Resultado ótimo: 0, ", [1/x for x = 1:dimensao])
-          println("Iterações executadas: ", Evolutionary.iterations(result))
-          println("Resultado obtido: ", minimum(result), ", ", Evolutionary.minimizer(result))
-          println()
-      end
-  end
-  x = readline()
-end
+d = 4
+result = Evolutionary.optimize(
+        f,
+        BoxConstraints([-d for i in 1:d], [d for i in 1:d]),
+        ES(
+            initStrategy = IsotropicStrategy(d),
+            recombination = Evolutionary.average,
+            srecombination = Evolutionary.average,
+            mu = 200,
+            rho = 100,
+            lambda = 400,
+            mutation = Evolutionary.gaussian,
+            smutation = Evolutionary.gaussian,
+            selection = :plus
+        ),
+        Evolutionary.Options(iterations = 30000, successive_f_tol = 10000)
+    )
+
+println(result)
+# for i = 1:5
+#   for j = 1:3
+#       for k = 1:2
+#           dimensao = 2^i
+#           printstyled(">Teste $i\n", color = :light_blue, blink = true)
+#           result = Evolutionary.optimize(f, zeros(dimensao), testesEE(i, j, k))
+#           println("Dimensão: ", 2^i)
+#           println("Resultado ótimo: 0, ", [1/x for x = 1:dimensao])
+#           println("Iterações executadas: ", Evolutionary.iterations(result))
+#           println("Resultado obtido: ", minimum(result), ", ", Evolutionary.minimizer(result))
+#           println()
+#       end
+#   end
+#   x = readline()
+# end
