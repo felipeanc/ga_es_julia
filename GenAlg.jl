@@ -39,36 +39,36 @@ function testesGA(i, j, k)
 
     if i == 1
         printstyled("Tam. população: ")
-        printstyled("100\n", color = :cyan)
-        return GA(populationSize = 100, 
+        printstyled("50\n", color = :cyan)
+        return GA(populationSize = 50, 
                   selection = s,
                   crossover = c, 
                   mutation = uniform(2 ^ i))
     elseif i == 2
         printstyled("Tam. população: ")
-        printstyled("80\n", color = :cyan)
-        return GA(populationSize = 80, 
-                  selection = s,
-                  crossover = c, 
-                  mutation = uniform(2 ^ i))
-    elseif i == 3
-        printstyled("Tam. população: ")
         printstyled("100\n", color = :cyan)
         return GA(populationSize = 100, 
                   selection = s,
                   crossover = c, 
                   mutation = uniform(2 ^ i))
-    elseif i == 4
+    elseif i == 3
         printstyled("Tam. população: ")
         printstyled("200\n", color = :cyan)
         return GA(populationSize = 200, 
                   selection = s,
                   crossover = c, 
                   mutation = uniform(2 ^ i))
+    elseif i == 4
+        printstyled("Tam. população: ")
+        printstyled("200\n", color = :cyan)
+        return GA(populationSize = 500, 
+                  selection = s,
+                  crossover = c, 
+                  mutation = uniform(2 ^ i))
     elseif i == 5
         printstyled("Tam. população: ")
         printstyled("500\n", color = :cyan)
-        return GA(populationSize = 500, 
+        return GA(populationSize = 1000, 
                   selection = s,
                   crossover = c, 
                   mutation = uniform(2 ^ i))
@@ -88,5 +88,5 @@ for i = 1:5
             println()
         end
     end
-    
+    x = readline()
 end
