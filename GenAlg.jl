@@ -12,67 +12,61 @@ function f(xx)
     sum(inner .^ 2)
 end
 
-function testesGA(i, j, k)
+function testes(i, j, k, f)
     if j == 1
         s = rouletteinv
-        printstyled("Seleção: ")
-        printstyled("Roleta Invertida\n", color = :cyan)
+        write(f, "> Seleção: Roleta Invertida")
+    elseif j == 2
+        s = tournament(100)
+        write(f, "> Seleção: Torneio")
     else
-        s = susinv
-        printstyled("Seleção: ")
-        printstyled("SUS Invertida\n", color = :cyan)
+      s = susinv
+      write(f, "> Seleção: Roleta Invertida")
     end
+
+    write(f, "\n")
 
     if k == 1
         c = DC
-        printstyled("Cruzamento: ")
-        printstyled("DC - Discreto\n", color = :cyan)
+        write(f, "> Cruzamento: Discreto")
     elseif k == 2
         c = AX
-        printstyled("Cruzamento: ")
-        printstyled("AX - Média\n", color = :cyan)
+        write(f, "> Cruzamento: Média")
     else
-        c = WAX
-        printstyled("Cruzamento: ")
-        printstyled("WAX - Média\n", color = :cyan)
+        c = IC(1)
+        write(f, "> Cruzamento: IC(1)")
     end
 
+    write(f, "\n")
+
     if i == 1
-        printstyled("Tam. população: ")
-        printstyled("50\n", color = :cyan)
-        return GA(populationSize = 50, 
-                  selection = s,
-                  crossover = c, 
-                  mutation = uniform(2 ^ i))
+      p = 5000
+      write(f, "> Tam. população: 5000")
     elseif i == 2
-        printstyled("Tam. população: ")
-        printstyled("100\n", color = :cyan)
-        return GA(populationSize = 100, 
-                  selection = s,
-                  crossover = c, 
-                  mutation = uniform(2 ^ i))
+      p = 6000
+      write(f, "> Tam. população: 6000")
     elseif i == 3
-        printstyled("Tam. população: ")
-        printstyled("200\n", color = :cyan)
-        return GA(populationSize = 200, 
-                  selection = s,
-                  crossover = c, 
-                  mutation = uniform(2 ^ i))
+      p = 7000
+      write(f, "> Tam. população: 7000")
     elseif i == 4
-        printstyled("Tam. população: ")
-        printstyled("500\n", color = :cyan)
-        return GA(populationSize = 500, 
-                  selection = s,
-                  crossover = c, 
-                  mutation = uniform(2 ^ i))
+      p = 8000
+      write(f, "> Tam. população: 8000")
     elseif i == 5
-        printstyled("Tam. população: ")
-        printstyled("1000\n", color = :cyan)
-        return GA(populationSize = 1000, 
-                  selection = s,
-                  crossover = c, 
-                  mutation = uniform(2 ^ i))
+      p = 10000
+      write(f, "> Tam. população: 10000")
     end
+
+    write(f, "\n")
+
+    return GA(
+      populationSize = p,
+      crossoverRate = 0.9,
+      mutationRate = 0.2,
+      epsilon = 0.3,
+      selection = s,
+      crossover = c,
+      mutation = Evolutionary.gaussian(0.5)
+    )
 end
 
 # for i = 1:5
@@ -82,7 +76,7 @@ end
 #             printstyled(">Teste $i\n", color = :light_blue, blink = true)
 #             result = Evolutionary.optimize(f, zeros(dimensao), testesGA(i, j, k))
 #             println("Dimensão: ", 2^i)
-#             println("Resultado ótimo: 0, ", [1/x for x = 1:dimensao])
+#             println()
 #             println("Iterações executadas: ", Evolutionary.iterations(result))
 #             println("Resultado obtido: ", minimum(result), ", ", Evolutionary.minimizer(result))
 #             println()
@@ -91,15 +85,27 @@ end
 #     x = readline()
 # end
 
-dimensao = 8
-result = Evolutionary.optimize(f, zeros(dimensao), GA(
-    populationSize = 5000,
-    crossoverRate = 0.8,
-    mutationRate = 0.2,
-    epsilon = 100,
-    selection = tournament(10),
-    crossover = Evolutionary.IC(1),
-    mutation = Evolutionary.gaussian(0.5)
-))
+results = open("ga_results.txt", "w");
+write(results, "############### ALGORITMO GENÉTICO ###############\n\n")
+for i = 1:5
+  for j = 1:3
+    for k = 1:3
+      dimensao = 2^i
+      println("$i, $j, $k")
+      write(results, "CASO $i\n")
+      write(results, "> Dimensão: $dimensao\n")
+      opts = Evolutionary.Options(abstol = 10e-18, reltol = 10e-18, iterations = 10000, time_limit = 600.0, parallelization=:thread)
+      result = Evolutionary.optimize(f, zeros(dimensao), testes(i, j, k, results), opts)
+      msg = "> Mínimo esperado: 0 \n"
+      write(results, msg)
+      msg = "> Minimizador: " * string([1/x for x = 1:dimensao]) * "\n"
+      write(results, msg)
+      msg = "> Mínimo encontrado: " * string(minimum(result)) * "\n"
+      write(results, msg)
+      msg = "> Minimizador: " * string(Evolutionary.minimizer(result)) * "\n\n"
+      write(results, msg)    
+    end
+  end
+  write(results, "\n") 
+end
 
-println(result)

@@ -1,0 +1,34 @@
+############### ALGORITMO GENÉTICO ###############
+
+TESTE 1
+> Dimensão: 
+> Tam. população: 
+> Seleção: 
+> Cruzamento:
+> Mínimo esperado:
+> Minimizador:
+> Mínimo obtido:
+> Mínimo encontrado: 
+> Minimizador:
+
+TESTE 1
+> Dimensão: 
+> Tam. população: 
+> Seleção: 
+> Cruzamento:
+> Mínimo esperado:
+> Minimizador:
+> Mínimo obtido:
+> Mínimo encontrado: 
+
+TESTE 1
+> Dimensão: 
+> Tam. população: 
+> Seleção: 
+> Cruzamento:
+> Mínimo esperado:
+> Minimizador:
+> Mínimo obtido:
+> Mínimo encontrado: 
+
+=====================//======================
